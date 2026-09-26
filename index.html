@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jake Liu | Banker who builds trading systems</title>
+  <meta name="description" content="Jake Liu: MBA and Universal Banker at Citi who designs and runs automated, risk-controlled trading systems in Python. New York.">
+  <link rel="canonical" href="https://jakeliu.me/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jakeliu.me/">
+  <meta property="og:title" content="Jake Liu | Banker who builds trading systems">
+  <meta property="og:description" content="MBA and Universal Banker at Citi who designs and runs automated, risk-controlled trading systems in Python.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314213d'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-size='28' font-weight='700' fill='white' text-anchor='middle'%3EJL%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./">Jake Liu</a>
+    <nav aria-label="Sections">
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">New York · English &amp; Mandarin</p>
+      <h1>Banker who builds trading systems.</h1>
+      <p class="lede">I'm an MBA and a Universal Banker at Citi. On my own time I design and run automated, risk-controlled trading systems in Python. I'm looking for market operations, trading operations, surveillance, and strategy &amp; operations roles in New York.</p>
+      <div class="cta">
+        <a class="button primary" href="mailto:Jake@JakeLiu.me">Email me</a>
+        <a class="button" href="https://www.linkedin.com/in/jakeliu-me">LinkedIn</a>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Highlights">
+      <div class="stat"><span class="num">177%</span><span class="label">of my year-to-date sales goal at Citi, five months in</span></div>
+      <div class="stat"><span class="num">5,800+</span><span class="label">automated tests behind my live Kalshi trading system</span></div>
+      <div class="stat"><span class="num">233M</span><span class="label">option quotes researched, and an overfit edge caught before any real money was at risk</span></div>
+    </section>
+
+    <section id="experience">
+      <h2>Experience</h2>
+      <article class="entry">
+        <div class="entry-head"><h3>Universal Banker · Citi</h3><span class="when">May 2026 – Present</span></div>
+        <ul>
+          <li>Reached 177% of my year-to-date consumer net sales growth goal and 124% of my Q3 2026 sales-and-referral credit goal.</li>
+          <li>Upgraded 5 client households to premium relationship tiers through needs-based financial reviews, including 4 Citi Priority upgrades (2.3x goal).</li>
+          <li>Open accounts, resolve service issues, and refer investment and lending needs to specialists, following KYC/AML and fraud-prevention procedures.</li>
+        </ul>
+      </article>
+      <article class="entry">
+        <div class="entry-head"><h3>Algorithmic Trading Systems Developer · Independent</h3><span class="when">Jan 2026 – Present</span></div>
+        <p>Design, build, and operate the trading and research systems described under Projects.</p>
+      </article>
+      <article class="entry">
+        <div class="entry-head"><h3>Independent Professional Development &amp; Certification</h3><span class="when">Oct 2022 – Present</span></div>
+        <ul>
+          <li>Implemented strategies that resulted in a 30% increase in organic traffic and a 25% boost in social media engagement.</li>
+          <li>A/B testing, keyword research, and competitive analysis with Google Analytics, Ahrefs, SEMrush, and WordPress.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+      <article class="entry">
+        <div class="entry-head"><h3>RN1K: automated trading on Kalshi</h3><span class="when">2026 · live</span></div>
+        <p>A Python trading system for event contracts on Kalshi, a CFTC-regulated prediction-market exchange. It trades crypto and commodity contracts with live capital from services on a Linux server; an earlier version traded weather markets.</p>
+        <ul>
+          <li><strong>Risk first.</strong> A kill switch checked every 250 ms, a 10-second balance and heartbeat deadman, per-strategy daily loss limits, and position sizing that tapers to zero at a 20% drawdown.</li>
+          <li><strong>Tested like production software.</strong> 1,800+ commits in 10 weeks, 5,800+ automated tests, and replay checks on recorded market data for every change to the trading path.</li>
+          <li><strong>Honest accounting.</strong> 3,400+ live fills reconciled at the wallet level: deposits, fees, and settlements. The system is not yet profitable, so held-out data decides which rule changes survive.</li>
+          <li><strong>Built with AI coding agents</strong> (Claude Code and Codex) that I direct.</li>
+        </ul>
+        <p class="stack">Python · asyncio · WebSockets · REST APIs · systemd · Linux · pytest</p>
+      </article>
+      <article class="entry">
+        <div class="entry-head"><h3>When the backtest lies: an options research post-mortem</h3><span class="when">Jan – Apr 2026 · retired</span></div>
+        <p>A research pipeline on 233M+ intraday option quotes across 36 underlyings (2018–2026): strategy discovery, walk-forward testing (train 2018–22, test 2023–25), and Monte Carlo simulation with market-impact costs.</p>
+        <ul>
+          <li>The backtests looked excellent. Rerunning the entire discovery process on shuffled data "found" strategies that were just as good (permutation p = 0.995), so the edge came from the search, not the market.</li>
+          <li>A paper-trading run through the Tradier brokerage API confirmed it. I shut the strategy down; no real money was ever at risk.</li>
+          <li>What I apply everywhere now: test the search process against noise, count every variant tried, and put hard risk limits in code before the first live dollar.</li>
+        </ul>
+        <p class="stack">Python · pandas · NumPy · Parquet · ThetaData · Tradier API</p>
+      </article>
+      <article class="entry">
+        <div class="entry-head"><h3>WebPeel: web extraction for AI agents</h3><span class="when">Feb – Mar 2026 · retired</span></div>
+        <p>A TypeScript CLI, REST API, and MCP server that turns web pages into clean Markdown for AI agents. I shipped 195 npm releases in six weeks; the package has 30,000+ downloads.</p>
+        <p class="stack">TypeScript · Node.js · Playwright · PostgreSQL · Stripe · <a href="https://www.npmjs.com/package/webpeel">npm package</a></p>
+      </article>
+    </section>
+
+    <section id="education">
+      <h2>Education</h2>
+      <div class="entry entry-head">
+        <h3>MBA · St. Joseph's University, New York</h3><span class="when">2025</span>
+        <p class="detail">GPA 3.625 · Corporate Financial Management, Financial Accounting &amp; Analysis, Statistical Applications &amp; Research</p>
+      </div>
+      <div class="entry entry-head">
+        <h3>BBA, Marketing · LIM College</h3><span class="when">2022</span>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <p>Python, SQL, pandas, asyncio, REST and WebSocket APIs, Linux/systemd, pytest, PostgreSQL, TypeScript · backtesting, walk-forward validation, Monte Carlo simulation, risk limits · Salesforce, KYC/AML, consultative sales · Google Analytics, SEO/SEM, A/B testing · English and Mandarin (native)</p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Email is the fastest way to reach me: <a href="mailto:Jake@JakeLiu.me">Jake@JakeLiu.me</a>. Resume on request.</p>
+      <p><a href="https://www.linkedin.com/in/jakeliu-me">LinkedIn: linkedin.com/in/jakeliu-me</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">© 2026 Jake Liu · Opinions are my own. Nothing on this site is investment advice.</footer>
+</body>
+</html>
