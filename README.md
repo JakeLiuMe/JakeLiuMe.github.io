@@ -1,29 +1,10 @@
 # jakeliu.me
 
-Source for [jakeliu.me](https://jakeliu.me), Jake Liu's personal site. Plain HTML and CSS; no build step.
+The published output of **Jake Liu, Annual Report 2026** — https://jakeliu.me
 
-## Layout
+Static HTML and CSS served by GitHub Pages. The pages are generated from a private
+source by a short Python build; this repository only holds what is published.
+No trackers, cookies or third-party scripts.
 
-- `index.html` — the site
-- `assets/site.css` — styles
-- `404.html` — shown by GitHub Pages for unknown paths
-- `CNAME` — custom domain for GitHub Pages
-- `.nojekyll` — serve files as-is (skip Jekyll)
-
-## Publishing
-
-GitHub Pages serves the `main` branch root. Pushing to `main` publishes within a minute or two.
-
-DNS (managed at Squarespace Domains):
-
-| Type  | Name | Value |
-|-------|------|-------|
-| A     | @    | 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 |
-| CNAME | www  | jakeliume.github.io |
-
-The MX and TXT records serve Google Workspace email for Jake@JakeLiu.me; leave them unchanged.
-
-## Content rules
-
-- Citi results as percentages only; no client dollar amounts, screenshots, or internal data.
-- Trading content describes engineering and risk controls, never recommendations.
+Fonts: Source Serif 4, Inter and IBM Plex Mono, under the SIL Open Font License
+(licenses in `assets/fonts/`).

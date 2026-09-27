@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Page not found · Jake Liu</title>
-<meta name="description" content="Page not found.">
-<link rel="canonical" href="https://jakeliu.me/404.html">
+<title>Colophon · Jake Liu</title>
+<meta name="description" content="How Jake Liu&#39;s Annual Report 2026 is made.">
+<link rel="canonical" href="https://jakeliu.me/colophon/">
 <meta name="theme-color" content="#FBF8F1">
 <meta name="color-scheme" content="light">
 <link rel="preload" href="/assets/fonts/source-serif-4-roman.woff2" as="font" type="font/woff2" crossorigin>
@@ -14,9 +14,9 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Jake Liu · Annual Report 2026">
-<meta property="og:title" content="Page not found · Jake Liu">
-<meta property="og:description" content="Page not found.">
-<meta property="og:url" content="https://jakeliu.me/404.html">
+<meta property="og:title" content="Colophon · Jake Liu">
+<meta property="og:description" content="How Jake Liu&#39;s Annual Report 2026 is made.">
+<meta property="og:url" content="https://jakeliu.me/colophon/">
 <meta property="og:image" content="https://jakeliu.me/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -41,13 +41,22 @@
   </div>
 </header>
 <main id="main" tabindex="-1">
-<article class="doc doc--error">
+<article class="doc">
   <header class="doc__head">
-    <p class="doc__kicker">Error 404</p>
-    <h1 class="doc__title">This page isn't in the report</h1>
-    <p class="doc__dek">The link may be old or the page may have moved. The whole report starts on the cover.</p>
+    <p class="doc__kicker">Colophon</p>
+    <h1 class="doc__title">How this report is made</h1>
   </header>
-  <p class="doc__actions"><a class="btn btn--primary" href="/">Go to the cover</a></p>
+  <dl class="spec">
+    <div><dt>Home page weight</dt><dd>140 KB compressed, fonts included</dd></div>
+    <div><dt>JavaScript</dt><dd>2.1 KB, optional. Every page reads fully without it.</dd></div>
+    <div><dt>Type</dt><dd>Source Serif 4, Inter and IBM Plex Mono, self-hosted under the SIL Open Font License</dd></div>
+    <div><dt>Palette</dt><dd><span class="swatch" style="--c:#FBF8F1"></span>Paper <span class="swatch" style="--c:#14171C"></span>Ink <span class="swatch" style="--c:#7A1F2B"></span>Oxblood <span class="swatch" style="--c:#1E5E48"></span>Green <span class="swatch" style="--c:#F2E2B3"></span>Highlighter</dd></div>
+    <div><dt>Sources</dt><dd>4 notes, each with a source and a date</dd></div>
+  </dl>
+  <div class="prose doc__body"><p>The report borrows its form from annual reports and financial statements: hairline rules, tabular figures, segment reviews and notes to the accounts. The point is that every claim can be checked.</p>
+<p>The site is static HTML and CSS, generated from plain-text files by a short Python script and served by GitHub Pages. There are no trackers, cookies or third-party scripts. Charts are drawn when the site is built, from public data such as npm’s download counts and from my own records, and each one has a data table underneath.</p>
+<p>I built it with AI coding agents under the same rules as the rest of my work. Every number traces to a note, the agents work from a list of claims they may not make, and the publishing step leaves out anything tagged as waiting on an approval.</p>
+</div>
 </article>
 </main>
 <footer class="footer" id="contact">
