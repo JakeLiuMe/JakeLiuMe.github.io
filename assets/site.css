@@ -1,6 +1,3 @@
-/* Jake Liu — personal site.
-   Personal-trading visibility is the data-show-trading attribute on <body>. */
-
 @font-face {
   font-family: "Source Serif 4";
   src: url("/assets/fonts/source-serif-4-roman.woff2") format("woff2");
@@ -781,6 +778,117 @@ sup.fn a {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 1.75rem;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-right: 0;
+}
+.strip div { min-width: 0; padding: 0.9rem 1rem 1rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.strip dt {
+  font-family: var(--sans);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.strip dd {
+  margin-top: 0.3rem;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  letter-spacing: -0.03em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+@media (min-width: 800px) {
+  .strip { grid-template-columns: repeat(4, 1fr); }
+}
+.chart-card { position: relative; margin-top: 1.75rem; }
+.chart-card figcaption {
+  margin-bottom: 0.7rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.chart {
+  width: 100%;
+  min-height: 16rem;
+  border-top: 1px solid var(--line);
+}
+.chart svg { display: block; width: 100%; height: auto; }
+.chart--bars { min-height: 0; padding-top: 0.75rem; }
+.bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.4rem;
+  height: 12rem;
+}
+.bar {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 2px;
+  padding: 0;
+  border: 0;
+  background: var(--ink);
+  cursor: pointer;
+}
+.bar.is-down { background: var(--oxblood); }
+.bar:hover, .bar:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 2px; }
+.tip {
+  position: absolute;
+  z-index: 2;
+  max-width: 16rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+  pointer-events: none;
+}
+.diagram { margin-top: 2.5rem; }
+.diagram__label {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+}
+.diagram__row {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.diagram__row li, .diagram__account {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--line);
+}
+.diagram__account { margin-top: 0.75rem; background: var(--paper-2); }
+.diagram__k {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.diagram__v {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+@media (min-width: 800px) {
+  .diagram__row { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media print {

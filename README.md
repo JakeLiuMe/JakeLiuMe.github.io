@@ -4,21 +4,13 @@ Personal site of Jake Liu. Static HTML and CSS, plus a short script, served by G
 
 Fonts are Source Serif 4, Inter, and IBM Plex Mono, self-hosted under the SIL Open Font License. License texts are in `assets/fonts/`.
 
-## Personal trading
+Trading sections use `data-show-trading` on `<body>` in `index.html`, `404.html`, and `colophon/index.html`. `"true"` shows them. `"false"` hides them.
 
-Citi Compliance has not cleared personal trading for publication.
-
-Each page sets `data-show-trading` on `<body>`. `"true"` shows the trading sections. `"false"` hides them. The attribute has to match on `index.html`, `404.html`, and `colophon/index.html`. Search the repository for `data-show-trading`.
-
-Hiding is visual. The copy stays in the HTML until every element marked `data-trading` is removed, and a search engine can still read text that is only hidden with CSS.
-
-If the public site must not describe trading at all, also replace the `<title>`, the meta description, and `og.png`. The banker-safe title and description are commented at the top of `index.html`.
-
-The internal name of the trading practice is intentionally absent from this repository.
+`/data/daily.json` feeds the performance charts. It is a list of `{ "date", "net_pnl_usd", "settled_trades" }`. An empty list, or a missing file, draws nothing.
 
 ## Resume
 
-`/Jake-Liu-Resume.pdf` is the current public resume. It does not describe the independent trading practice. Replace the file with the trading draft only after that draft’s open items are confirmed, and only if compliance allows the PDF to mention the trading.
+`/Jake-Liu-Resume.pdf` is the current public resume.
 
 ## Domain
 
