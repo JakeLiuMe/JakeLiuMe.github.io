@@ -157,7 +157,7 @@
     svg.setAttribute("role", "img");
     const last = points[points.length - 1];
     const maxDd = points.reduce((m, p) => Math.max(m, p.dd), 0);
-    svg.setAttribute("aria-label", "Cumulative net P&L ending at " + money(last.cum) + ". Largest drawdown on daily closes " + money(maxDd) + ".");
+    svg.setAttribute("aria-label", "Cumulative net P&L ending at " + money(last.cum) + ". Largest drawdown on daily closes " + money(maxDd).replace(/^\+/, "") + ".");
     const shade = document.createElementNS(ns, "path");
     let d = "M " + x(0) + " " + y(points[0].peak);
     for (let i = 1; i < points.length; i++) d += " L " + x(i) + " " + y(points[i].peak);

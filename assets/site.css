@@ -806,6 +806,14 @@ sup.fn a {
 @media (min-width: 800px) {
   .strip { grid-template-columns: repeat(4, 1fr); }
 }
+.chart-note {
+  margin-top: 0.85rem;
+  max-width: 40rem;
+  font-family: var(--sans);
+  font-size: 0.84rem;
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
 .chart-card { position: relative; margin-top: 1.75rem; }
 .chart-card figcaption {
   margin-bottom: 0.7rem;
