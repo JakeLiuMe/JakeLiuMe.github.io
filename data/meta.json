@@ -1,0 +1,15 @@
+{
+ "as_of": "2026-11-28T09:51-05:00",
+ "last_settle": "2026-11-28T09:17-05:00",
+ "window_start": "2026-09-25",
+ "window_end": "2026-11-28",
+ "total_pnl_usd": 17375.25,
+ "settled_trades": 29785,
+ "max_drawdown_trade_usd": 2462.07,
+ "strategies": 27,
+ "largest_strategy_pnl_usd": 13607.91,
+ "strategies_negative": 6,
+ "strategies_flat": 1,
+ "contracts": 387977,
+ "notional_usd": 266498.28
+}

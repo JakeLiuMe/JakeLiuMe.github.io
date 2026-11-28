@@ -1,322 +1,457 @@
 [
-  {
-    "date": "2026-09-25",
-    "net_pnl_usd": 2.69,
-    "settled_trades": 70
-  },
-  {
-    "date": "2026-09-26",
-    "net_pnl_usd": 1.83,
-    "settled_trades": 113
-  },
-  {
-    "date": "2026-09-27",
-    "net_pnl_usd": 4.55,
-    "settled_trades": 103
-  },
-  {
-    "date": "2026-09-28",
-    "net_pnl_usd": 5.19,
-    "settled_trades": 111
-  },
-  {
-    "date": "2026-09-29",
-    "net_pnl_usd": 3.77,
-    "settled_trades": 182
-  },
-  {
-    "date": "2026-09-30",
-    "net_pnl_usd": 19.56,
-    "settled_trades": 321
-  },
-  {
-    "date": "2026-10-01",
-    "net_pnl_usd": 21.08,
-    "settled_trades": 302
-  },
-  {
-    "date": "2026-10-02",
-    "net_pnl_usd": 9.96,
-    "settled_trades": 548
-  },
-  {
-    "date": "2026-10-03",
-    "net_pnl_usd": 17.54,
-    "settled_trades": 407
-  },
-  {
-    "date": "2026-10-04",
-    "net_pnl_usd": 43.87,
-    "settled_trades": 394
-  },
-  {
-    "date": "2026-10-05",
-    "net_pnl_usd": 67.85,
-    "settled_trades": 514
-  },
-  {
-    "date": "2026-10-06",
-    "net_pnl_usd": 100.85,
-    "settled_trades": 515
-  },
-  {
-    "date": "2026-10-07",
-    "net_pnl_usd": 34.14,
-    "settled_trades": 457
-  },
-  {
-    "date": "2026-10-08",
-    "net_pnl_usd": 65.44,
-    "settled_trades": 344
-  },
-  {
-    "date": "2026-10-09",
-    "net_pnl_usd": 138.87,
-    "settled_trades": 335
-  },
-  {
-    "date": "2026-10-10",
-    "net_pnl_usd": 48.7,
-    "settled_trades": 203
-  },
-  {
-    "date": "2026-10-11",
-    "net_pnl_usd": -42.96,
-    "settled_trades": 247
-  },
-  {
-    "date": "2026-10-12",
-    "net_pnl_usd": 191.25,
-    "settled_trades": 368
-  },
-  {
-    "date": "2026-10-13",
-    "net_pnl_usd": 247.07,
-    "settled_trades": 463
-  },
-  {
-    "date": "2026-10-14",
-    "net_pnl_usd": -79.04,
-    "settled_trades": 494
-  },
-  {
-    "date": "2026-10-15",
-    "net_pnl_usd": -94.22,
-    "settled_trades": 402
-  },
-  {
-    "date": "2026-10-16",
-    "net_pnl_usd": 79.57,
-    "settled_trades": 357
-  },
-  {
-    "date": "2026-10-17",
-    "net_pnl_usd": 118.53,
-    "settled_trades": 187
-  },
-  {
-    "date": "2026-10-18",
-    "net_pnl_usd": 0.84,
-    "settled_trades": 194
-  },
-  {
-    "date": "2026-10-19",
-    "net_pnl_usd": -78.28,
-    "settled_trades": 362
-  },
-  {
-    "date": "2026-10-20",
-    "net_pnl_usd": 123.08,
-    "settled_trades": 357
-  },
-  {
-    "date": "2026-10-21",
-    "net_pnl_usd": 155.72,
-    "settled_trades": 401
-  },
-  {
-    "date": "2026-10-22",
-    "net_pnl_usd": 87.53,
-    "settled_trades": 295
-  },
-  {
-    "date": "2026-10-23",
-    "net_pnl_usd": 128.59,
-    "settled_trades": 204
-  },
-  {
-    "date": "2026-10-24",
-    "net_pnl_usd": 135.08,
-    "settled_trades": 211
-  },
-  {
-    "date": "2026-10-25",
-    "net_pnl_usd": -33.15,
-    "settled_trades": 259
-  },
-  {
-    "date": "2026-10-26",
-    "net_pnl_usd": 220.43,
-    "settled_trades": 184
-  },
-  {
-    "date": "2026-10-27",
-    "net_pnl_usd": 324.63,
-    "settled_trades": 224
-  },
-  {
-    "date": "2026-10-28",
-    "net_pnl_usd": 123.83,
-    "settled_trades": 257
-  },
-  {
-    "date": "2026-10-29",
-    "net_pnl_usd": 21.6,
-    "settled_trades": 216
-  },
-  {
-    "date": "2026-10-30",
-    "net_pnl_usd": 304.34,
-    "settled_trades": 401
-  },
-  {
-    "date": "2026-10-31",
-    "net_pnl_usd": -161.17,
-    "settled_trades": 268
-  },
-  {
-    "date": "2026-11-01",
-    "net_pnl_usd": 78.14,
-    "settled_trades": 308
-  },
-  {
-    "date": "2026-11-02",
-    "net_pnl_usd": -93.64,
-    "settled_trades": 558
-  },
-  {
-    "date": "2026-11-03",
-    "net_pnl_usd": 132.37,
-    "settled_trades": 737
-  },
-  {
-    "date": "2026-11-04",
-    "net_pnl_usd": 244.45,
-    "settled_trades": 906
-  },
-  {
-    "date": "2026-11-05",
-    "net_pnl_usd": 138.13,
-    "settled_trades": 948
-  },
-  {
-    "date": "2026-11-06",
-    "net_pnl_usd": 431.25,
-    "settled_trades": 901
-  },
-  {
-    "date": "2026-11-07",
-    "net_pnl_usd": -27.18,
-    "settled_trades": 489
-  },
-  {
-    "date": "2026-11-08",
-    "net_pnl_usd": 102.26,
-    "settled_trades": 684
-  },
-  {
-    "date": "2026-11-09",
-    "net_pnl_usd": 627.73,
-    "settled_trades": 967
-  },
-  {
-    "date": "2026-11-10",
-    "net_pnl_usd": 427.67,
-    "settled_trades": 1007
-  },
-  {
-    "date": "2026-11-11",
-    "net_pnl_usd": 436.66,
-    "settled_trades": 1079
-  },
-  {
-    "date": "2026-11-12",
-    "net_pnl_usd": 1138.47,
-    "settled_trades": 1048
-  },
-  {
-    "date": "2026-11-13",
-    "net_pnl_usd": 338.01,
-    "settled_trades": 952
-  },
-  {
-    "date": "2026-11-14",
-    "net_pnl_usd": 1.64,
-    "settled_trades": 629
-  },
-  {
-    "date": "2026-11-15",
-    "net_pnl_usd": 541.73,
-    "settled_trades": 761
-  },
-  {
-    "date": "2026-11-16",
-    "net_pnl_usd": 456.53,
-    "settled_trades": 869
-  },
-  {
-    "date": "2026-11-17",
-    "net_pnl_usd": 221.76,
-    "settled_trades": 934
-  },
-  {
-    "date": "2026-11-18",
-    "net_pnl_usd": 2634.49,
-    "settled_trades": 534
-  },
-  {
-    "date": "2026-11-19",
-    "net_pnl_usd": 467.71,
-    "settled_trades": 473
-  },
-  {
-    "date": "2026-11-20",
-    "net_pnl_usd": 743.85,
-    "settled_trades": 571
-  },
-  {
-    "date": "2026-11-21",
-    "net_pnl_usd": 12.12,
-    "settled_trades": 478
-  },
-  {
-    "date": "2026-11-22",
-    "net_pnl_usd": 432.14,
-    "settled_trades": 428
-  },
-  {
-    "date": "2026-11-23",
-    "net_pnl_usd": 133.8,
-    "settled_trades": 443
-  },
-  {
-    "date": "2026-11-24",
-    "net_pnl_usd": -1447.51,
-    "settled_trades": 481
-  },
-  {
-    "date": "2026-11-25",
-    "net_pnl_usd": 3232.58,
-    "settled_trades": 486
-  },
-  {
-    "date": "2026-11-26",
-    "net_pnl_usd": 3377.34,
-    "settled_trades": 306
-  },
-  {
-    "date": "2026-11-27",
-    "net_pnl_usd": 137.15,
-    "settled_trades": 382
-  }
+ {
+  "date": "2026-09-25",
+  "net_pnl_usd": 2.69,
+  "settled_trades": 70,
+  "contracts": 70,
+  "notional_usd": 45.62
+ },
+ {
+  "date": "2026-09-26",
+  "net_pnl_usd": 1.83,
+  "settled_trades": 113,
+  "contracts": 112,
+  "notional_usd": 67.24
+ },
+ {
+  "date": "2026-09-27",
+  "net_pnl_usd": 4.55,
+  "settled_trades": 103,
+  "contracts": 103,
+  "notional_usd": 50.5
+ },
+ {
+  "date": "2026-09-28",
+  "net_pnl_usd": 5.19,
+  "settled_trades": 111,
+  "contracts": 109,
+  "notional_usd": 63.14
+ },
+ {
+  "date": "2026-09-29",
+  "net_pnl_usd": 3.77,
+  "settled_trades": 182,
+  "contracts": 178,
+  "notional_usd": 98.04
+ },
+ {
+  "date": "2026-09-30",
+  "net_pnl_usd": 19.56,
+  "settled_trades": 321,
+  "contracts": 320,
+  "notional_usd": 182.5
+ },
+ {
+  "date": "2026-10-01",
+  "net_pnl_usd": 21.08,
+  "settled_trades": 302,
+  "contracts": 527,
+  "notional_usd": 300.39
+ },
+ {
+  "date": "2026-10-02",
+  "net_pnl_usd": 9.96,
+  "settled_trades": 548,
+  "contracts": 817,
+  "notional_usd": 515.84
+ },
+ {
+  "date": "2026-10-03",
+  "net_pnl_usd": 17.54,
+  "settled_trades": 407,
+  "contracts": 688,
+  "notional_usd": 485.06
+ },
+ {
+  "date": "2026-10-04",
+  "net_pnl_usd": 43.87,
+  "settled_trades": 394,
+  "contracts": 1427,
+  "notional_usd": 995.59
+ },
+ {
+  "date": "2026-10-05",
+  "net_pnl_usd": 67.85,
+  "settled_trades": 514,
+  "contracts": 2071,
+  "notional_usd": 1451.04
+ },
+ {
+  "date": "2026-10-06",
+  "net_pnl_usd": 100.85,
+  "settled_trades": 515,
+  "contracts": 3065,
+  "notional_usd": 2332.25
+ },
+ {
+  "date": "2026-10-07",
+  "net_pnl_usd": 34.14,
+  "settled_trades": 457,
+  "contracts": 3116,
+  "notional_usd": 2388.33
+ },
+ {
+  "date": "2026-10-08",
+  "net_pnl_usd": 65.44,
+  "settled_trades": 344,
+  "contracts": 2014,
+  "notional_usd": 1530.77
+ },
+ {
+  "date": "2026-10-09",
+  "net_pnl_usd": 138.87,
+  "settled_trades": 335,
+  "contracts": 2730,
+  "notional_usd": 2088.47
+ },
+ {
+  "date": "2026-10-10",
+  "net_pnl_usd": 48.7,
+  "settled_trades": 203,
+  "contracts": 1936,
+  "notional_usd": 1602.77
+ },
+ {
+  "date": "2026-10-11",
+  "net_pnl_usd": -42.96,
+  "settled_trades": 247,
+  "contracts": 2488,
+  "notional_usd": 1959.67
+ },
+ {
+  "date": "2026-10-12",
+  "net_pnl_usd": 191.25,
+  "settled_trades": 368,
+  "contracts": 3629,
+  "notional_usd": 3018.14
+ },
+ {
+  "date": "2026-10-13",
+  "net_pnl_usd": 247.07,
+  "settled_trades": 463,
+  "contracts": 4777,
+  "notional_usd": 3859.43
+ },
+ {
+  "date": "2026-10-14",
+  "net_pnl_usd": -79.04,
+  "settled_trades": 494,
+  "contracts": 4914,
+  "notional_usd": 3901.8
+ },
+ {
+  "date": "2026-10-15",
+  "net_pnl_usd": -94.22,
+  "settled_trades": 402,
+  "contracts": 3527,
+  "notional_usd": 2987.11
+ },
+ {
+  "date": "2026-10-16",
+  "net_pnl_usd": 79.57,
+  "settled_trades": 357,
+  "contracts": 3105,
+  "notional_usd": 2517.19
+ },
+ {
+  "date": "2026-10-17",
+  "net_pnl_usd": 118.53,
+  "settled_trades": 187,
+  "contracts": 2360,
+  "notional_usd": 1699.15
+ },
+ {
+  "date": "2026-10-18",
+  "net_pnl_usd": 0.84,
+  "settled_trades": 194,
+  "contracts": 2361,
+  "notional_usd": 1943.8
+ },
+ {
+  "date": "2026-10-19",
+  "net_pnl_usd": -78.28,
+  "settled_trades": 362,
+  "contracts": 4427,
+  "notional_usd": 3884.67
+ },
+ {
+  "date": "2026-10-20",
+  "net_pnl_usd": 123.08,
+  "settled_trades": 357,
+  "contracts": 4487,
+  "notional_usd": 3582.5
+ },
+ {
+  "date": "2026-10-21",
+  "net_pnl_usd": 155.72,
+  "settled_trades": 401,
+  "contracts": 5506,
+  "notional_usd": 4612.6
+ },
+ {
+  "date": "2026-10-22",
+  "net_pnl_usd": 87.53,
+  "settled_trades": 295,
+  "contracts": 4011,
+  "notional_usd": 3312.47
+ },
+ {
+  "date": "2026-10-23",
+  "net_pnl_usd": 128.59,
+  "settled_trades": 204,
+  "contracts": 3046,
+  "notional_usd": 1960.38
+ },
+ {
+  "date": "2026-10-24",
+  "net_pnl_usd": 135.08,
+  "settled_trades": 211,
+  "contracts": 3396,
+  "notional_usd": 2343.38
+ },
+ {
+  "date": "2026-10-25",
+  "net_pnl_usd": -33.15,
+  "settled_trades": 259,
+  "contracts": 4382,
+  "notional_usd": 2760.03
+ },
+ {
+  "date": "2026-10-26",
+  "net_pnl_usd": 220.43,
+  "settled_trades": 184,
+  "contracts": 3297,
+  "notional_usd": 2091.54
+ },
+ {
+  "date": "2026-10-27",
+  "net_pnl_usd": 324.63,
+  "settled_trades": 224,
+  "contracts": 4407,
+  "notional_usd": 3165.85
+ },
+ {
+  "date": "2026-10-28",
+  "net_pnl_usd": 123.83,
+  "settled_trades": 257,
+  "contracts": 5226,
+  "notional_usd": 3724.74
+ },
+ {
+  "date": "2026-10-29",
+  "net_pnl_usd": 21.6,
+  "settled_trades": 216,
+  "contracts": 4068,
+  "notional_usd": 2585.23
+ },
+ {
+  "date": "2026-10-30",
+  "net_pnl_usd": 304.34,
+  "settled_trades": 401,
+  "contracts": 7439,
+  "notional_usd": 4844.72
+ },
+ {
+  "date": "2026-10-31",
+  "net_pnl_usd": -161.17,
+  "settled_trades": 268,
+  "contracts": 6160,
+  "notional_usd": 3449.06
+ },
+ {
+  "date": "2026-11-01",
+  "net_pnl_usd": 78.14,
+  "settled_trades": 308,
+  "contracts": 6772,
+  "notional_usd": 3040.38
+ },
+ {
+  "date": "2026-11-02",
+  "net_pnl_usd": -93.64,
+  "settled_trades": 558,
+  "contracts": 8779,
+  "notional_usd": 5302.02
+ },
+ {
+  "date": "2026-11-03",
+  "net_pnl_usd": 132.37,
+  "settled_trades": 737,
+  "contracts": 7665,
+  "notional_usd": 5246.17
+ },
+ {
+  "date": "2026-11-04",
+  "net_pnl_usd": 244.45,
+  "settled_trades": 906,
+  "contracts": 8287,
+  "notional_usd": 5719.15
+ },
+ {
+  "date": "2026-11-05",
+  "net_pnl_usd": 138.13,
+  "settled_trades": 948,
+  "contracts": 8775,
+  "notional_usd": 5613.85
+ },
+ {
+  "date": "2026-11-06",
+  "net_pnl_usd": 431.25,
+  "settled_trades": 901,
+  "contracts": 11564,
+  "notional_usd": 8463.59
+ },
+ {
+  "date": "2026-11-07",
+  "net_pnl_usd": -27.18,
+  "settled_trades": 489,
+  "contracts": 9115,
+  "notional_usd": 7247.26
+ },
+ {
+  "date": "2026-11-08",
+  "net_pnl_usd": 102.26,
+  "settled_trades": 684,
+  "contracts": 11348,
+  "notional_usd": 8791.22
+ },
+ {
+  "date": "2026-11-09",
+  "net_pnl_usd": 627.73,
+  "settled_trades": 967,
+  "contracts": 14445,
+  "notional_usd": 10720.98
+ },
+ {
+  "date": "2026-11-10",
+  "net_pnl_usd": 427.67,
+  "settled_trades": 1007,
+  "contracts": 13186,
+  "notional_usd": 9121.01
+ },
+ {
+  "date": "2026-11-11",
+  "net_pnl_usd": 436.66,
+  "settled_trades": 1079,
+  "contracts": 15017,
+  "notional_usd": 10069.83
+ },
+ {
+  "date": "2026-11-12",
+  "net_pnl_usd": 1138.47,
+  "settled_trades": 1048,
+  "contracts": 14908,
+  "notional_usd": 9948.28
+ },
+ {
+  "date": "2026-11-13",
+  "net_pnl_usd": 338.01,
+  "settled_trades": 952,
+  "contracts": 16672,
+  "notional_usd": 11140.2
+ },
+ {
+  "date": "2026-11-14",
+  "net_pnl_usd": 1.64,
+  "settled_trades": 629,
+  "contracts": 5127,
+  "notional_usd": 3701.49
+ },
+ {
+  "date": "2026-11-15",
+  "net_pnl_usd": 541.73,
+  "settled_trades": 761,
+  "contracts": 8711,
+  "notional_usd": 6072.13
+ },
+ {
+  "date": "2026-11-16",
+  "net_pnl_usd": 456.53,
+  "settled_trades": 869,
+  "contracts": 10609,
+  "notional_usd": 6719.69
+ },
+ {
+  "date": "2026-11-17",
+  "net_pnl_usd": 221.76,
+  "settled_trades": 934,
+  "contracts": 19349,
+  "notional_usd": 12876.48
+ },
+ {
+  "date": "2026-11-18",
+  "net_pnl_usd": 2634.49,
+  "settled_trades": 534,
+  "contracts": 14842,
+  "notional_usd": 10552.72
+ },
+ {
+  "date": "2026-11-19",
+  "net_pnl_usd": 467.71,
+  "settled_trades": 473,
+  "contracts": 8737,
+  "notional_usd": 5271.07
+ },
+ {
+  "date": "2026-11-20",
+  "net_pnl_usd": 743.85,
+  "settled_trades": 571,
+  "contracts": 5963,
+  "notional_usd": 3368.52
+ },
+ {
+  "date": "2026-11-21",
+  "net_pnl_usd": 12.12,
+  "settled_trades": 478,
+  "contracts": 571,
+  "notional_usd": 403.31
+ },
+ {
+  "date": "2026-11-22",
+  "net_pnl_usd": 432.14,
+  "settled_trades": 428,
+  "contracts": 1650,
+  "notional_usd": 1075.01
+ },
+ {
+  "date": "2026-11-23",
+  "net_pnl_usd": 133.8,
+  "settled_trades": 443,
+  "contracts": 9039,
+  "notional_usd": 5952.39
+ },
+ {
+  "date": "2026-11-24",
+  "net_pnl_usd": -1447.51,
+  "settled_trades": 481,
+  "contracts": 10232,
+  "notional_usd": 6955.99
+ },
+ {
+  "date": "2026-11-25",
+  "net_pnl_usd": 3232.58,
+  "settled_trades": 486,
+  "contracts": 15034,
+  "notional_usd": 10304.66
+ },
+ {
+  "date": "2026-11-26",
+  "net_pnl_usd": 3377.34,
+  "settled_trades": 306,
+  "contracts": 10921,
+  "notional_usd": 5766.63
+ },
+ {
+  "date": "2026-11-27",
+  "net_pnl_usd": 190.98,
+  "settled_trades": 458,
+  "contracts": 13545,
+  "notional_usd": 8007.26
+ },
+ {
+  "date": "2026-11-28",
+  "net_pnl_usd": 42.62,
+  "settled_trades": 80,
+  "contracts": 818,
+  "notional_usd": 645.98
+ }
 ]
