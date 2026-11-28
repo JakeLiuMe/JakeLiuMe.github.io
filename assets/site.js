@@ -46,6 +46,9 @@
     });
   });
 
+
+  /* ---------- Performance: one cumulative line ---------- */
+
   function loadPerformance() {
     const root = document.querySelector("[data-performance]");
     if (!root) return;
@@ -54,8 +57,8 @@
       .then((payload) => {
         const series = normalize(payload);
         if (!series.length) return;
-        mount(root, series);
         root.hidden = false;
+        mount(root, series);
       })
       .catch(() => {});
   }
@@ -76,48 +79,20 @@
 
   function withEquity(series) {
     let cum = 0;
-    let peak = 0;
     return series.map((row) => {
-      cum += row.net_pnl_usd;
-      if (cum > peak) peak = cum;
-      return { ...row, cum, peak, dd: peak - cum };
+      cum = Math.round((cum + row.net_pnl_usd) * 100) / 100;
+      return { ...row, cum };
     });
   }
 
-  function weeksOf(series) {
-    const groups = new Map();
-    for (const row of series) {
-      const key = weekStart(row.date);
-      const cur = groups.get(key) || { start: key, net_pnl_usd: 0, settled_trades: 0 };
-      cur.net_pnl_usd += row.net_pnl_usd;
-      cur.settled_trades += row.settled_trades;
-      groups.set(key, cur);
-    }
-    return [...groups.values()];
-  }
-
-  function weekStart(iso) {
-    const [y, m, d] = iso.split("-").map(Number);
-    const dt = new Date(Date.UTC(y, m - 1, d));
-    const day = dt.getUTCDay();
-    dt.setUTCDate(dt.getUTCDate() - (day === 0 ? 6 : day - 1));
-    return dt.toISOString().slice(0, 10);
-  }
-
-  function money(n) {
-    const sign = n < 0 ? "−" : n > 0 ? "+" : "";
-    const abs = Math.abs(n);
-    const digits = abs >= 1000 ? 0 : 2;
-    return sign + "$" + abs.toLocaleString("en-US", { minimumFractionDigits: digits, maximumFractionDigits: digits });
+  function dollars(n) {
+    const sign = n < 0 ? "\u2212" : n > 0 ? "+" : "";
+    return sign + "$" + Math.round(Math.abs(n)).toLocaleString("en-US");
   }
 
   function moneyExact(n) {
-    const sign = n < 0 ? "−" : n > 0 ? "+" : "";
+    const sign = n < 0 ? "\u2212" : n > 0 ? "+" : "";
     return sign + "$" + Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  }
-
-  function plainMoney(n) {
-    return money(n).replace(/^\+/, "");
   }
 
   function pretty(iso) {
@@ -126,354 +101,319 @@
     return d + " " + months[m - 1] + " " + y;
   }
 
-  function sliceRange(series, mode) {
-    if (mode !== "1m" || !series.length) return series;
-    const end = Date.parse(series[series.length - 1].date + "T00:00:00Z");
-    const start = end - 30 * 86400000;
-    const cut = series.filter((row) => Date.parse(row.date + "T00:00:00Z") >= start);
-    return cut.length ? cut : series;
+  function short(iso) {
+    return pretty(iso).replace(/ \d{4}$/, "");
+  }
+
+  function axisMoney(n) {
+    if (n === 0) return "$0";
+    const sign = n < 0 ? "\u2212" : "";
+    const abs = Math.abs(n);
+    if (abs < 1000) return sign + "$" + abs;
+    return sign + "$" + String(Math.round(abs / 100) / 10).replace(/\.0$/, "") + "k";
+  }
+
+  const RANGES = { "1w": { rows: 7, label: "past 7 days" }, "1m": { rows: 30, label: "past 30 days" }, all: { rows: Infinity, label: "" } };
+
+  function niceStep(raw) {
+    const pow = Math.pow(10, Math.floor(Math.log10(raw)));
+    const f = raw / pow;
+    return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * pow;
+  }
+
+  /* Monotone cubic path: smooth, and never overshoots the data. */
+  function smoothPath(pts) {
+    const n = pts.length;
+    if (n < 2) return "M" + pts[0][0] + " " + pts[0][1];
+    const dx = [];
+    const m = [];
+    for (let i = 0; i < n - 1; i++) {
+      dx.push(pts[i + 1][0] - pts[i][0]);
+      m.push((pts[i + 1][1] - pts[i][1]) / dx[i]);
+    }
+    const t = [m[0]];
+    for (let i = 1; i < n - 1; i++) {
+      t.push(m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2);
+    }
+    t.push(m[n - 2]);
+    for (let i = 0; i < n - 1; i++) {
+      if (m[i] === 0) { t[i] = 0; t[i + 1] = 0; continue; }
+      const a = t[i] / m[i];
+      const b = t[i + 1] / m[i];
+      const s = a * a + b * b;
+      if (s > 9) {
+        const k = 3 / Math.sqrt(s);
+        t[i] = k * a * m[i];
+        t[i + 1] = k * b * m[i];
+      }
+    }
+    const f = (v) => Math.round(v * 100) / 100;
+    let d = "M" + f(pts[0][0]) + " " + f(pts[0][1]);
+    for (let i = 0; i < n - 1; i++) {
+      const h = dx[i] / 3;
+      d += "C" + f(pts[i][0] + h) + " " + f(pts[i][1] + t[i] * h) + " " + f(pts[i + 1][0] - h) + " " + f(pts[i + 1][1] - t[i + 1] * h) + " " + f(pts[i + 1][0]) + " " + f(pts[i + 1][1]);
+    }
+    return d;
+  }
+
+  function svgEl(name, attrs) {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", name);
+    for (const key in attrs) el.setAttribute(key, attrs[key]);
+    return el;
   }
 
   function mount(root, series) {
-    let mode = "all";
-    const paint = () => renderRange(root, sliceRange(series, mode), series);
-    let resizeTimer = 0;
-    window.addEventListener("resize", () => {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(paint, 150);
-    });
-    root.querySelectorAll("[data-range]").forEach((button) => {
-      button.addEventListener("click", () => {
-        mode = button.dataset.range || "all";
-        root.querySelectorAll("[data-range]").forEach((other) => {
-          other.setAttribute("aria-pressed", other === button ? "true" : "false");
-        });
-        paint();
-      });
-    });
+    const all = withEquity(series);
+    const host = root.querySelector("[data-equity]");
+    const valueEl = root.querySelector("[data-perf-value]");
+    const subEl = root.querySelector("[data-perf-period]");
+    const liveEl = root.querySelector("[data-perf-live]");
+    const buttons = root.querySelectorAll("[data-range]");
     const tableHost = root.querySelector("[data-table]");
-    if (tableHost) tableHost.replaceChildren(dailyTable(withEquity(series)));
-    paint();
-  }
+    if (tableHost) tableHost.replaceChildren(dailyTable(all));
+    if (!host) return;
 
-  function renderRange(root, series, full) {
-    const points = withEquity(series);
-    const weeks = weeksOf(series);
-    const maxDd = points.reduce((m, p) => Math.max(m, p.dd), 0);
-    const net = points[points.length - 1].cum;
-    const trades = series.reduce((sum, row) => sum + row.settled_trades, 0);
-    const upDays = series.filter((row) => row.net_pnl_usd > 0).length;
-    const value = root.querySelector("[data-perf-value]");
-    const period = root.querySelector("[data-perf-period]");
-    if (value) {
-      value.textContent = money(net);
-      value.classList.toggle("is-down", net < 0);
-    }
-    if (period) period.textContent = pretty(points[0].date) + " – " + pretty(points[points.length - 1].date);
-    root.querySelector("[data-strip]").replaceChildren(
-      stat("Net P&L", money(net)),
-      stat("Settled trades", trades.toLocaleString("en-US")),
-      stat("Drawdown, daily closes", moneyExact(maxDd).replace(/^\+/, "")),
-      stat("Profitable days", upDays + " of " + series.length),
-    );
-    const underLabel = root.querySelector("[data-under-label]");
-    if (underLabel) underLabel.textContent = "Drawdown on daily closes · " + moneyExact(maxDd).replace(/^\+/, "");
-    const frame = frameOf(points);
-    const equityHost = root.querySelector("[data-equity]");
-    const tip = root.querySelector("[data-tip]");
-    equityHost.replaceChildren(equitySvg(points, frame, maxDd));
-    root.querySelector("[data-under]").replaceChildren(underSvg(points, frame));
-    root.querySelector("[data-weekly]").replaceChildren(weeklySvg(weeks, frame, tip, root));
-    bindCrosshair(equityHost, points, frame, tip, root);
-    const fullNet = withEquity(full)[full.length - 1].cum;
-    equityHost.setAttribute("aria-label", "Cumulative net P&L " + money(net) + " from " + pretty(points[0].date) + " to " + pretty(points[points.length - 1].date) + ". Drawdown on daily closes " + moneyExact(maxDd).replace(/^\+/, "") + ". Full-window trade-level drawdown " + moneyExact(TRADE_DD).replace(/^\+/, "") + ". Full-window net " + money(fullNet) + ".");
-    armDraw(root.querySelector("[data-equity] svg"));
-  }
+    const tip = document.createElement("div");
+    tip.className = "pf-tip";
+    tip.hidden = true;
+    const tipDate = document.createElement("span");
+    const tipValue = document.createElement("strong");
+    tip.append(tipDate, tipValue);
 
-  function stat(label, value) {
-    const wrap = document.createElement("div");
-    const dt = document.createElement("dt");
-    dt.textContent = label;
-    const dd = document.createElement("dd");
-    dd.textContent = value;
-    wrap.append(dt, dd);
-    return wrap;
-  }
+    let mode = "all";
+    let view = all;
+    let base = 0;
+    let geo = null;
+    let width = 0;
+    let index = -1;
 
-  const TRADE_DD = 2462.07;
-  const MARKS = [
-    { date: "2026-11-15", label: "Size increased", kind: "size" },
-    { date: "2026-11-23", label: "Size increased", kind: "size" },
-    { date: "2026-11-24", label: "Worst day −$1,447.51", kind: "dip" },
-    { date: "2026-11-25", label: "Size increased", kind: "size" }
-  ];
-  const NS = "http://www.w3.org/2000/svg";
-  let gradSeq = 0;
-
-  function frameOf(points) {
-    const compact = window.matchMedia("(max-width: 700px)").matches;
-    const width = compact ? 480 : 800;
-    const height = compact ? 300 : 360;
-    const pad = compact ? { l: 64, r: 14, t: 56, b: 40 } : { l: 54, r: 20, t: 52, b: 36 };
-    const font = compact ? 18 : 13;
-    const hi = Math.max(...points.map((p) => p.cum), 0);
-    const lo = Math.min(0, ...points.map((p) => p.cum));
-    const yMax = Math.max(hi * 1.18, 16000);
-    const yMin = lo;
-    const t0 = Date.parse(points[0].date + "T00:00:00Z");
-    const t1 = Date.parse(points[points.length - 1].date + "T00:00:00Z");
-    const xOf = (date) => {
-      const t = Date.parse(date + "T00:00:00Z");
-      const u = t1 === t0 ? 0.5 : (t - t0) / (t1 - t0);
-      return pad.l + u * (width - pad.l - pad.r);
+    const rest = () => {
+      const last = view[view.length - 1];
+      valueEl.textContent = dollars(all[all.length - 1].cum);
+      valueEl.classList.toggle("is-down", all[all.length - 1].cum < 0);
+      if (mode === "all") {
+        subEl.textContent = pretty(view[0].date) + " \u2013 " + pretty(last.date);
+      } else {
+        const change = Math.round((last.cum - base) * 100) / 100;
+        subEl.textContent = dollars(change) + " " + RANGES[mode].label;
+      }
     };
-    const yOf = (value) => pad.t + (1 - (value - yMin) / (yMax - yMin || 1)) * (height - pad.t - pad.b);
-    return { width, height, pad, yMax, yMin, t0, t1, xOf, yOf, font };
-  }
 
-  function el(name, attrs) {
-    const node = document.createElementNS(NS, name);
-    for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, String(value));
-    return node;
-  }
-
-  function equitySvg(points, frame, maxDd) {
-    const { width, height, pad, yOf, xOf } = frame;
-    const svg = el("svg", { viewBox: "0 0 " + width + " " + height, role: "img", "aria-hidden": "true" });
-    const gid = "pnlFill" + (++gradSeq);
-    const defs = el("defs", {});
-    const grad = el("linearGradient", { id: gid, x1: "0", y1: "0", x2: "0", y2: "1" });
-    grad.append(el("stop", { offset: "0%", "stop-color": "#1E5E48", "stop-opacity": "0.28" }));
-    grad.append(el("stop", { offset: "100%", "stop-color": "#1E5E48", "stop-opacity": "0" }));
-    defs.append(grad);
-    svg.append(defs);
-    for (const tick of [0, 5000, 10000, 15000]) {
-      if (tick > frame.yMax) continue;
-      const y = yOf(tick);
-      svg.append(el("line", { x1: pad.l, x2: width - pad.r, y1: y, y2: y, stroke: "#E0D8CC", "stroke-width": "1" }));
-      const label = el("text", { x: pad.l - 8, y: y + 4, "text-anchor": "end", fill: "#5E584E", "font-family": "Inter, sans-serif", "font-size": frame.font });
-      label.textContent = tick === 0 ? "$0" : "$" + tick / 1000 + "K";
-      svg.append(label);
-    }
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const byMonth = new Map();
-    for (const point of points) {
-      const key = point.date.slice(0, 7);
-      if (!byMonth.has(key)) byMonth.set(key, []);
-      byMonth.get(key).push(point);
-    }
-    for (const [key, group] of byMonth) {
-      const mid = group[Math.floor(group.length / 2)];
-      const text = el("text", { x: xOf(mid.date), y: height - 12, "text-anchor": "middle", fill: "#5E584E", "font-family": "Inter, sans-serif", "font-size": frame.font });
-      text.textContent = months[Number(key.slice(5)) - 1];
-      svg.append(text);
-    }
-    let line = "";
-    points.forEach((point, i) => {
-      line += (i ? " L " : "M ") + xOf(point.date) + " " + yOf(point.cum);
-    });
-    const area = el("path", { d: line + " L " + xOf(points[points.length - 1].date) + " " + yOf(0) + " L " + xOf(points[0].date) + " " + yOf(0) + " Z", fill: "url(#" + gid + ")", class: "chart-area" });
-    const stroke = el("path", { d: line, fill: "none", stroke: "#1E5E48", "stroke-width": frame.font > 16 ? "4.5" : "2.75", "stroke-linecap": "round", "stroke-linejoin": "round", class: "chart-line" });
-    svg.append(area, stroke);
-    const last = points[points.length - 1];
-    const lx = xOf(last.date);
-    const ly = yOf(last.cum);
-    svg.append(el("circle", { cx: lx, cy: ly, r: "5.5", fill: "#1E5E48", stroke: "#F4F0E6", "stroke-width": "2" }));
-    const endLabel = el("text", { x: lx - 10, y: Math.max(frame.font + 4, ly - 12), "text-anchor": "end", fill: "#1E5E48", "font-family": "Inter, sans-serif", "font-size": frame.font + 1, "font-weight": "600" });
-    endLabel.textContent = money(last.cum);
-    svg.append(endLabel);
-    const byDate = new Map(points.map((point) => [point.date, point]));
-    MARKS.forEach((mark) => {
-      const point = byDate.get(mark.date);
-      if (!point) return;
-      const mx = xOf(point.date);
-      const my = yOf(point.cum);
-      const dip = mark.kind === "dip";
-      svg.append(el("line", { x1: mx, x2: mx, y1: pad.t - 6, y2: my, stroke: dip ? "#7A1F2B" : "#8A8276", "stroke-dasharray": "2 3", "stroke-width": "1", "pointer-events": "none" }));
-      svg.append(el("circle", { cx: mx, cy: my, r: "3.5", fill: dip ? "#7A1F2B" : "#12110F", stroke: "#F4F0E6", "stroke-width": "1.5", "pointer-events": "none" }));
-      const lab = el("text", { x: mx, y: Math.max(frame.font + 2, my - (dip ? 16 : 14)), "text-anchor": "middle", fill: dip ? "#7A1F2B" : "#5E584E", "font-family": "Inter, sans-serif", "font-size": Math.max(9, frame.font - 2), "font-weight": dip ? "600" : "500" });
-      lab.textContent = mark.label;
-      svg.append(lab);
-    });
-    svg.dataset.maxDd = String(maxDd);
-    const hair = el("line", { class: "crosshair", x1: 0, x2: 0, y1: pad.t, y2: height - pad.b, stroke: "#5E584E", "stroke-dasharray": "3 3", visibility: "hidden" });
-    const dot = el("circle", { class: "crossdot", r: "4.5", fill: "#F4F0E6", stroke: "#1E5E48", "stroke-width": "2", visibility: "hidden" });
-    svg.append(hair, dot);
-    return svg;
-  }
-
-  function underSvg(points, frame) {
-    const height = 92;
-    const { width, pad, xOf } = frame;
-    const maxDd = Math.max(...points.map((p) => p.dd), 1);
-    const yOf = (dd) => 14 + (dd / maxDd) * (height - 28);
-    const svg = el("svg", { viewBox: "0 0 " + width + " " + height, role: "img", "aria-hidden": "true" });
-    svg.append(el("line", { x1: pad.l, x2: width - pad.r, y1: yOf(0), y2: yOf(0), stroke: "#E0D8CC" }));
-    let d = "M " + xOf(points[0].date) + " " + yOf(points[0].dd);
-    for (let i = 1; i < points.length; i++) d += " L " + xOf(points[i].date) + " " + yOf(points[i].dd);
-    svg.append(el("path", { d: d + " L " + xOf(points[points.length - 1].date) + " " + yOf(0) + " L " + xOf(points[0].date) + " " + yOf(0) + " Z", fill: "rgba(122, 31, 43, 0.16)" }));
-    svg.append(el("path", { d, fill: "none", stroke: "#7A1F2B", "stroke-width": "1.75", "stroke-linejoin": "round" }));
-    return svg;
-  }
-
-  function weeklySvg(weeks, frame, tip, root) {
-    const height = 148;
-    const { width, pad, xOf, t0, t1 } = frame;
-    const svg = el("svg", { viewBox: "0 0 " + width + " " + height, role: "img", "aria-label": "Weekly settled net P&L" });
-    const maxAbs = Math.max(...weeks.map((week) => Math.abs(week.net_pnl_usd)), 1);
-    const yOf = (value) => {
-      const mid = 18 + (height - 36) / 2;
-      return mid - (value / maxAbs) * ((height - 36) / 2);
-    };
-    svg.append(el("line", { x1: pad.l, x2: width - pad.r, y1: yOf(0), y2: yOf(0), stroke: "#E0D8CC" }));
-    const span = Math.max(t1 - t0, 1);
-    const weekWidth = Math.max(8, Math.min(34, ((7 * 86400000) / span) * (width - pad.l - pad.r) * 0.62));
-    for (const week of weeks) {
-      const midDate = weekMid(week.start);
-      const x = xOf(midDate) - weekWidth / 2;
-      const y = Math.min(yOf(week.net_pnl_usd), yOf(0));
-      const h = Math.max(2, Math.abs(yOf(week.net_pnl_usd) - yOf(0)));
-      const rect = el("rect", {
-        x, y, width: weekWidth, height: h, rx: "4",
-        fill: week.net_pnl_usd < 0 ? "#7A1F2B" : "#1E5E48",
-        tabindex: "0", role: "button",
-      });
-      const label = "Week of " + pretty(week.start) + ". Net " + moneyExact(week.net_pnl_usd) + ". " + week.settled_trades.toLocaleString("en-US") + " settled trades.";
-      rect.setAttribute("aria-label", label);
-      const show = (event) => placeTip(tip, root, event.currentTarget, label);
-      rect.addEventListener("pointerenter", show);
-      rect.addEventListener("focus", show);
-      rect.addEventListener("pointerleave", () => { tip.hidden = true; });
-      rect.addEventListener("blur", () => { tip.hidden = true; });
-      svg.append(rect);
-      const value = el("text", {
-        x: x + weekWidth / 2,
-        y: week.net_pnl_usd >= 0 ? y - 5 : y + h + 11,
-        "text-anchor": "middle",
-        fill: week.net_pnl_usd < 0 ? "#7A1F2B" : "#1E5E48",
-        "font-family": "Inter, sans-serif",
-        "font-size": frame.font > 16 ? 11 : 10,
-        "font-weight": "600",
-      });
-      const abs = Math.abs(week.net_pnl_usd);
-      const short = abs >= 1000
-        ? (week.net_pnl_usd < 0 ? "−" : "+") + "$" + (abs / 1000).toFixed(abs >= 10000 ? 1 : 1) + "K"
-        : (week.net_pnl_usd < 0 ? "−" : "+") + "$" + Math.round(abs);
-      value.textContent = short;
-      svg.append(value);
-    }
-    return svg;
-  }
-
-  function weekMid(start) {
-    const dt = new Date(Date.parse(start + "T00:00:00Z") + 3 * 86400000);
-    return dt.toISOString().slice(0, 10);
-  }
-
-  function bindCrosshair(host, points, frame, tip, root) {
-    const svg = host.querySelector("svg");
-    const hair = svg.querySelector(".crosshair");
-    const dot = svg.querySelector(".crossdot");
-    let index = points.length - 1;
-    const show = (clientX) => {
-      const box = svg.getBoundingClientRect();
-      const rel = ((clientX - box.left) / box.width) * frame.width;
-      let best = 0;
-      let dist = Infinity;
-      points.forEach((point, i) => {
-        const dx = Math.abs(frame.xOf(point.date) - rel);
-        if (dx < dist) { dist = dx; best = i; }
-      });
-      index = best;
-      const point = points[best];
-      const x = frame.xOf(point.date);
-      const y = frame.yOf(point.cum);
-      hair.setAttribute("x1", x);
-      hair.setAttribute("x2", x);
-      hair.setAttribute("visibility", "visible");
-      dot.setAttribute("cx", x);
-      dot.setAttribute("cy", y);
-      dot.setAttribute("visibility", "visible");
-      const text = pretty(point.date) + "\nDaily " + moneyExact(point.net_pnl_usd) + "\nCumulative " + moneyExact(point.cum);
-      placeTip(tip, root, svg, text, (x / frame.width) * box.width, (y / frame.height) * box.height);
-    };
-    host.style.touchAction = "none";
-    host.addEventListener("pointermove", (event) => {
-      show(event.clientX);
-    });
-    host.addEventListener("pointerdown", (event) => {
-      if (host.setPointerCapture) host.setPointerCapture(event.pointerId);
-      show(event.clientX);
-    });
-    host.addEventListener("pointerup", (event) => {
-      if (event.pointerType !== "mouse") return;
-      hair.setAttribute("visibility", "hidden");
-      dot.setAttribute("visibility", "hidden");
+    const hide = () => {
+      index = -1;
       tip.hidden = true;
-    });
-    host.addEventListener("pointerleave", (event) => {
-      if (event.pointerType && event.pointerType !== "mouse") return;
-      hair.setAttribute("visibility", "hidden");
-      dot.setAttribute("visibility", "hidden");
-      tip.hidden = true;
-    });
-    host.addEventListener("keydown", (event) => {
-      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-      event.preventDefault();
-      index = Math.max(0, Math.min(points.length - 1, index + (event.key === "ArrowRight" ? 1 : -1)));
-      const point = points[index];
-      const x = frame.xOf(point.date);
-      const y = frame.yOf(point.cum);
-      hair.setAttribute("x1", x);
-      hair.setAttribute("x2", x);
-      hair.setAttribute("visibility", "visible");
-      dot.setAttribute("cx", x);
-      dot.setAttribute("cy", y);
-      dot.setAttribute("visibility", "visible");
-      const box = svg.getBoundingClientRect();
-      placeTip(tip, root, svg, pretty(point.date) + "\nDaily " + moneyExact(point.net_pnl_usd) + "\nCumulative " + moneyExact(point.cum), (x / frame.width) * box.width, (y / frame.height) * box.height);
-    });
-  }
-
-  function placeTip(tip, root, anchor, text, localX, localY) {
-    tip.hidden = false;
-    tip.textContent = text;
-    const stack = root.querySelector(".chart-stack");
-    const host = (stack || tip.parentElement).getBoundingClientRect();
-    const box = anchor.getBoundingClientRect();
-    const x = localX == null ? box.left - host.left : box.left - host.left + localX;
-    const y = localY == null ? box.top - host.top - tip.offsetHeight - 8 : box.top - host.top + localY - tip.offsetHeight - 12;
-    const width = tip.offsetWidth || 160;
-    tip.style.left = Math.max(8, Math.min(x - width / 2, host.width - width - 8)) + "px";
-    tip.style.top = Math.max(8, y) + "px";
-  }
-
-  function armDraw(svg) {
-    if (!svg) return;
-    svg.classList.add("is-drawn");
-    const line = svg.querySelector(".chart-line");
-    if (!line || reduce) return;
-    const length = line.getTotalLength();
-    if (!length) return;
-    line.style.transition = "none";
-    line.style.strokeDasharray = String(length);
-    line.style.strokeDashoffset = String(length);
-    const reveal = () => {
-      line.style.transition = "stroke-dashoffset 1.15s cubic-bezier(0.16, 1, 0.3, 1)";
-      line.style.strokeDashoffset = "0";
+      if (geo) {
+        geo.cross.setAttribute("visibility", "hidden");
+        geo.dot.setAttribute("visibility", "hidden");
+      }
+      host.classList.remove("is-scrubbing");
+      if (view.length) rest();
     };
-    requestAnimationFrame(reveal);
-    window.setTimeout(() => {
-      line.style.transition = "none";
-      line.style.strokeDashoffset = "0";
-    }, 1400);
+
+    const focusPoint = (i, announce) => {
+      if (!geo) return;
+      i = Math.max(0, Math.min(view.length - 1, i));
+      const p = view[i];
+      const x = geo.x(i);
+      const y = geo.y(p.cum);
+      index = i;
+      geo.cross.setAttribute("x1", x);
+      geo.cross.setAttribute("x2", x);
+      geo.cross.setAttribute("visibility", "visible");
+      geo.dot.setAttribute("transform", "translate(" + x + " " + y + ")");
+      geo.dot.setAttribute("visibility", "visible");
+      host.classList.add("is-scrubbing");
+      valueEl.textContent = dollars(p.cum);
+      valueEl.classList.toggle("is-down", p.cum < 0);
+      subEl.textContent = pretty(p.date);
+      tipDate.textContent = pretty(p.date);
+      tipValue.textContent = dollars(p.cum);
+      tip.hidden = false;
+      const tw = tip.offsetWidth;
+      const th = tip.offsetHeight;
+      let left;
+      let top;
+      if (y - th - 16 >= 0) {
+        left = x - tw / 2;
+        top = y - th - 16;
+      } else {
+        left = x < width / 2 ? x + 16 : x - tw - 16;
+        top = Math.max(0, Math.min(y - th / 2, geo.bottom - th));
+      }
+      tip.style.transform = "translate(" + Math.round(Math.max(0, Math.min(left, width - tw))) + "px," + Math.round(top) + "px)";
+      if (announce && liveEl) liveEl.textContent = pretty(p.date) + ", cumulative " + dollars(p.cum);
+    };
+
+    const nearest = (clientX) => {
+      const box = host.getBoundingClientRect();
+      const px = clientX - box.left;
+      const f = (px - geo.left) / (geo.right - geo.left);
+      return Math.round(Math.max(0, Math.min(1, f)) * (view.length - 1));
+    };
+
+    const draw = (animate) => {
+      width = Math.round(host.clientWidth);
+      if (!width) return;
+      const compact = width < 560;
+      const height = compact ? 280 : 360;
+      const left = compact ? 38 : 48;
+      const right = 4;
+      const top = 14;
+      const bottom = 30;
+      const pw = width - left - right;
+      const ph = height - top - bottom;
+      const vals = view.map((p) => p.cum);
+      let lo = mode === "all" ? 0 : Math.min(...vals);
+      let hi = Math.max(...vals);
+      if (hi === lo) hi = lo + 1;
+      const pad = (hi - lo) * (mode === "all" ? 0.06 : 0.1);
+      hi += pad;
+      if (mode !== "all") lo -= pad;
+      const step = niceStep((hi - lo) / 4);
+      const ticks = [];
+      for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) ticks.push(Math.round(v * 100) / 100);
+      const y = (v) => top + ph - ((v - lo) / (hi - lo)) * ph;
+      const x = (i) => left + (view.length === 1 ? pw : (i / (view.length - 1)) * pw);
+      const pts = view.map((p, i) => [x(i), y(p.cum)]);
+      const line = smoothPath(pts);
+      const floor = top + ph;
+      const area = line + "L" + x(view.length - 1) + " " + floor + "L" + x(0) + " " + floor + "Z";
+
+      const svg = svgEl("svg", { viewBox: "0 0 " + width + " " + height, width: width, height: height, "aria-hidden": "true", focusable: "false" });
+      const defs = svgEl("defs", {});
+      const grad = svgEl("linearGradient", { id: "pf-fill", x1: "0", y1: "0", x2: "0", y2: "1" });
+      grad.append(svgEl("stop", { offset: "0", "stop-color": "#1E5E48", "stop-opacity": "0.2" }), svgEl("stop", { offset: "1", "stop-color": "#1E5E48", "stop-opacity": "0" }));
+      defs.append(grad);
+      svg.append(defs);
+      for (const v of ticks) {
+        const gy = Math.round(y(v)) + 0.5;
+        svg.append(svgEl("line", { class: "pf-grid", x1: left, x2: width - right, y1: gy, y2: gy }));
+        const label = svgEl("text", { class: "pf-tick", x: left - 10, y: gy + 4, "text-anchor": "end" });
+        label.textContent = axisMoney(v);
+        svg.append(label);
+      }
+      const startLabel = svgEl("text", { class: "pf-tick", x: left, y: height - 6, "text-anchor": "start" });
+      startLabel.textContent = short(view[0].date);
+      const endLabel = svgEl("text", { class: "pf-tick", x: width - right, y: height - 6, "text-anchor": "end" });
+      endLabel.textContent = short(view[view.length - 1].date);
+      svg.append(startLabel, endLabel);
+      const areaEl = svgEl("path", { class: "pf-area", d: area, fill: "url(#pf-fill)" });
+      const lineEl = svgEl("path", { class: "pf-line", d: line });
+      const cross = svgEl("line", { class: "pf-cross", x1: 0, x2: 0, y1: top, y2: floor, visibility: "hidden" });
+      const dot = svgEl("g", { class: "pf-dot", visibility: "hidden" });
+      dot.append(svgEl("circle", { r: 9, class: "pf-halo" }), svgEl("circle", { r: 4.5, class: "pf-core" }));
+      svg.append(areaEl, lineEl, cross, dot);
+
+      geo = { x, y, cross, dot, left, right: width - right, bottom: height, floor };
+      host.replaceChildren(svg, tip);
+      host.style.height = height + "px";
+      index = -1;
+      tip.hidden = true;
+      host.classList.remove("is-scrubbing");
+      rest();
+
+      if (animate && !reduce) {
+        const len = lineEl.getTotalLength();
+        lineEl.style.strokeDasharray = String(len);
+        lineEl.style.strokeDashoffset = String(len);
+        areaEl.style.opacity = "0";
+        const go = () => {
+          lineEl.style.transition = "stroke-dashoffset 1.2s cubic-bezier(0.16, 1, 0.3, 1)";
+          areaEl.style.transition = "opacity 0.9s ease 0.25s";
+          lineEl.style.strokeDashoffset = "0";
+          areaEl.style.opacity = "1";
+          window.setTimeout(() => { lineEl.style.strokeDasharray = "none"; lineEl.style.transition = "none"; }, 1500);
+        };
+        if ("IntersectionObserver" in window) {
+          const io = new IntersectionObserver((entries) => {
+            if (!entries.some((e) => e.isIntersecting)) return;
+            io.disconnect();
+            go();
+          }, { threshold: 0.35 });
+          io.observe(host);
+          window.setTimeout(() => { io.disconnect(); go(); }, 6000);
+        } else {
+          go();
+        }
+      }
+    };
+
+    const setMode = (next, intro) => {
+      mode = next;
+      const n = RANGES[mode].rows;
+      const startAt = Number.isFinite(n) ? Math.max(0, all.length - n) : 0;
+      view = all.slice(startAt);
+      base = startAt > 0 ? all[startAt - 1].cum : 0;
+      buttons.forEach((b) => b.setAttribute("aria-pressed", b.dataset.range === mode ? "true" : "false"));
+      draw(!!intro);
+      if (intro) return;
+      const line = host.querySelector(".pf-line");
+      const area = host.querySelector(".pf-area");
+      if (!reduce && line) {
+        line.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: "ease-out" });
+        area.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: "ease-out" });
+      }
+    };
+
+    buttons.forEach((b) => b.addEventListener("click", () => setMode(b.dataset.range || "all")));
+
+    let pending = 0;
+    let lastX = 0;
+    host.addEventListener("pointerdown", (e) => {
+      if (!geo) return;
+      lastX = e.clientX;
+      if (e.pointerType === "mouse") return;
+      focusPoint(nearest(e.clientX), false);
+    });
+    host.addEventListener("pointermove", (e) => {
+      if (!geo) return;
+      lastX = e.clientX;
+      if (pending) return;
+      pending = requestAnimationFrame(() => {
+        pending = 0;
+        const i = nearest(lastX);
+        if (i !== index) focusPoint(i, false);
+      });
+    });
+    ["pointerleave", "pointercancel", "pointerup"].forEach((type) => {
+      host.addEventListener(type, (e) => {
+        if (type === "pointerup" && e.pointerType === "mouse") return;
+        if (pending) { cancelAnimationFrame(pending); pending = 0; }
+        hide();
+      });
+    });
+    host.addEventListener("keydown", (e) => {
+      if (!geo) return;
+      const k = e.key;
+      if (k !== "ArrowLeft" && k !== "ArrowRight" && k !== "Home" && k !== "End" && k !== "Escape") return;
+      e.preventDefault();
+      if (k === "Escape") { hide(); return; }
+      const next = k === "Home" ? 0 : k === "End" ? view.length - 1 : (index < 0 ? view.length - 1 : index) + (k === "ArrowRight" ? 1 : -1);
+      focusPoint(next, true);
+    });
+    host.addEventListener("blur", hide);
+
+    let lastWidth = 0;
+    let rz = 0;
+    const onResize = () => {
+      cancelAnimationFrame(rz);
+      rz = requestAnimationFrame(() => {
+        const w = Math.round(host.clientWidth);
+        if (w && w !== lastWidth) { lastWidth = w; draw(false); }
+      });
+    };
+    if ("ResizeObserver" in window) new ResizeObserver(onResize).observe(host);
+    else window.addEventListener("resize", onResize);
+
+    lastWidth = Math.round(host.clientWidth);
+    setMode("all", true);
   }
 
   function dailyTable(points) {
     const table = document.createElement("table");
     table.className = "perf-table";
     const caption = document.createElement("caption");
-    caption.textContent = "Daily settled P&L and the cumulative total. Drawdown in the chart is measured on these daily closes.";
+    caption.textContent = "Daily settled P&L and the cumulative total. Drawdown is measured on these daily closes.";
     const head = document.createElement("thead");
     head.innerHTML = "<tr><th scope=\"col\">Date</th><th scope=\"col\">Daily P&L</th><th scope=\"col\">Cumulative</th><th scope=\"col\">Settled trades</th></tr>";
     const body = document.createElement("tbody");
