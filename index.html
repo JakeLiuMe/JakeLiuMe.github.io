@@ -170,39 +170,34 @@
       <p class="section__kicker">Performance</p>
       <h2 class="section__title" id="performance-title">The book, day by day.</h2>
       <div class="perf-head">
-        <div>
-          <p class="perf-value" data-perf-value aria-live="polite"></p>
+        <div class="perf-meta">
+          <p class="perf-label">Cumulative net P&amp;L</p>
+          <p class="perf-value" data-perf-value></p>
           <p class="perf-period" data-perf-period></p>
         </div>
         <div class="range" role="group" aria-label="Time range">
+          <button type="button" data-range="1w" aria-pressed="false">1W</button>
           <button type="button" data-range="1m" aria-pressed="false">1M</button>
           <button type="button" data-range="all" aria-pressed="true">All</button>
         </div>
       </div>
-      <dl class="strip" data-strip></dl>
-      <dl class="desk">
+      <figure class="chart-card">
+        <figcaption class="sr-only">Cumulative settled net P&amp;L for the selected range, one line.</figcaption>
+        <div class="chart" data-equity tabindex="0" role="application" aria-label="Cumulative net P&amp;L, line chart. Use the left and right arrow keys to move through the days."></div>
+        <p class="sr-only" data-perf-live aria-live="polite"></p>
+      </figure>
+      <p class="pstats__cap">Whole window · 25 Sep – 27 Nov 2026</p>
+      <dl class="pstats">
+        <div><dt>Settled trades</dt><dd>29,629</dd></div>
+        <div><dt>Profitable days</dt><dd>55 of 64</dd></div>
         <div><dt>Average day</dt><dd>+$269.98</dd></div>
-        <div><dt>Best day</dt><dd>+$3,377.34 · 26 Nov</dd></div>
-        <div><dt>Worst day</dt><dd>−$1,447.51 · 24 Nov</dd></div>
         <div><dt>Profitable weeks</dt><dd>10 of 10</dd></div>
-        <div><dt>Longest losing streak</dt><dd>2 days · 14–15 Oct</dd></div>
+        <div><dt>Best day</dt><dd>+$3,377.34<span>26 Nov</span></dd></div>
+        <div><dt>Worst day</dt><dd>−$1,447.51<span>24 Nov</span></dd></div>
+        <div><dt>Drawdown, daily closes</dt><dd>$1,447.51</dd></div>
+        <div><dt>Longest losing streak</dt><dd>2 days<span>14–15 Oct</span></dd></div>
       </dl>
-      <div class="chart-stack">
-        <figure class="chart-card">
-          <figcaption class="sr-only">Cumulative settled net P&amp;L for the selected range.</figcaption>
-          <div class="chart" data-equity tabindex="0" role="application" aria-label="Cumulative net P&amp;L. Arrow keys move the crosshair."></div>
-        </figure>
-        <figure class="chart-card chart-card--under">
-          <figcaption data-under-label>Drawdown on daily closes</figcaption>
-          <div class="chart chart--under" data-under></div>
-        </figure>
-        <figure class="chart-card chart-card--bars">
-          <figcaption>Weekly net P&amp;L, on the same dates</figcaption>
-          <div class="chart chart--bars" data-weekly></div>
-        </figure>
-        <p class="tip" data-tip role="tooltip" hidden></p>
-      </div>
-      <p class="chart-note">Drawdown is $2,462.07 peak to trough, measured trade by trade, and $1,447.51 on daily closes, which is the figure in the strip chart. Window: 25 Sep–27 Nov 2026, ending 19:16 ET on 27 Nov. Settled P&amp;L, aggregated across strategies. Markers on the equity curve show when the largest strategy’s size increased, and the worst day.</p>
+      <p class="chart-note">Drawdown is $2,462.07 peak to trough, measured trade by trade, and $1,447.51 on daily closes, which is the figure in the stats above. Window: 25 Sep–27 Nov 2026, ending 19:16 ET on 27 Nov. Settled P&amp;L, aggregated across strategies.</p>
       <details class="data-fallback">
         <summary>Daily figures</summary>
         <div class="table-scroll" tabindex="0" data-table></div>
