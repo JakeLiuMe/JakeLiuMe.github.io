@@ -397,7 +397,7 @@ body[data-show-trading="true"] [data-public-only] { display: none !important; }
   .proofs { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 800px) {
-  .stats { grid-template-columns: repeat(3, 1fr); }
+  .stats { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* Sections */
