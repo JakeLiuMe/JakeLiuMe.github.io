@@ -88,24 +88,24 @@
       <dl class="stats" data-trading>
         <div class="stat stat--lead">
           <dt class="stat__k">Net P&amp;L after fees</dt>
-          <dd class="stat__n">+$17.3<span class="stat__unit">K</span></dd>
-          <dd class="stat__sub">$17,279</dd>
+          <dd class="stat__n"><span data-bind="total_k">+$17.3</span><span class="stat__unit">K</span></dd>
+          <dd class="stat__sub"><span data-bind="total_r">$17,279</span></dd>
         </div>
         <div class="stat">
           <dt class="stat__k">Settled trades</dt>
-          <dd class="stat__n">29,629</dd>
+          <dd class="stat__n"><span data-bind="trades">29,629</span></dd>
         </div>
         <div class="stat">
           <dt class="stat__k">Profitable days</dt>
-          <dd class="stat__n">55<span class="stat__of"> of 64</span></dd>
+          <dd class="stat__n"><span data-bind="prof_days">55</span><span class="stat__of"> of <span data-bind="days">64</span></span></dd>
         </div>
         <div class="stat">
           <dt class="stat__k">Max drawdown</dt>
-          <dd class="stat__n">$2,462</dd>
+          <dd class="stat__n"><span data-bind="dd_trade_r">$2,462</span></dd>
           <dd class="stat__sub">By trade</dd>
         </div>
       </dl>
-      <p class="asof" data-trading>25 September–27 November 2026, 19:16 ET · Own account · Primarily Kalshi · 24 hours a day, including weekends</p>
+      <p class="asof" data-trading><span data-bind="asof_long">25 September–27 November 2026, 19:16 ET</span> · Own account · Primarily Kalshi · 24 hours a day, including weekends</p>
 
       <div class="proofs" data-public-only>
         <p class="proof"><span class="proof__n">30,000+</span><span class="proof__k">npm downloads</span></p>
@@ -125,15 +125,15 @@
           <ol class="measure">
             <li>
               <strong>Net P&amp;L</strong>
-              <p>+$17,278.80 after fees, from 25 September through 27 November 2026 (19:16 ET), on 29,629 settled trades.</p>
+              <p><span data-bind="total_x">+$17,278.80</span> after fees, from <span data-bind="start_long">25 September</span> through <span data-bind="end_long">27 November 2026</span> (<span data-bind="asof_time">19:16</span> ET), on <span data-bind="trades">29,629</span> settled trades.</p>
             </li>
             <li>
               <strong>Days</strong>
-              <p>64 trading days. 55 of them were profitable.</p>
+              <p><span data-bind="days">64</span> trading days. <span data-bind="prof_days">55</span> of them were profitable.</p>
             </li>
             <li>
               <strong>Drawdown</strong>
-              <p>Defined once, under the chart: $2,462.07 trade by trade, $1,447.51 on daily closes.</p>
+              <p>Defined once, under the chart: <span data-bind="dd_trade">$2,462.07</span> trade by trade, <span data-bind="dd_close">$1,447.51</span> on daily closes.</p>
             </li>
             <li>
               <strong>Scale</strong>
@@ -141,24 +141,24 @@
             </li>
             <li>
               <strong>Source</strong>
-              <p>Settlement ledgers, read 27 November 2026. Live trades, net of fees.</p>
+              <p>Settlement ledgers, read <span data-bind="end_long">27 November 2026</span>. Live trades, net of fees.</p>
             </li>
           </ol>
         </div>
         <aside class="concentration reveal">
           <h3>Concentration</h3>
-          <p>The largest strategy is 79% of net P&amp;L, +$13,607.91. The other 26 strategies booked +$3,670.89. Three days, 18, 25, and 26 November, account for $9,244.41, 53% of the total.</p>
+          <p>The largest strategy is <span data-bind="top_share">79%</span> of net P&amp;L, <span data-bind="top_pnl">+$13,607.91</span>. The other <span data-bind="others_n">26</span> strategies booked <span data-bind="others_pnl">+$3,670.89</span>. Three days, <span data-bind="top3_days">18, 25, and 26 November</span>, account for <span data-bind="top3_sum">$9,244.41</span>, <span data-bind="top3_share">53%</span> of the total.</p>
           <figure class="split">
-            <div class="split__bar" role="img" aria-label="Share of net P and L. The largest strategy is 79 percent. The other strategies are the remaining 21 percent.">
-              <span class="split__main"></span>
-              <span class="split__rest"></span>
+            <div class="split__bar" role="img" aria-label="Share of net P and L. The largest strategy is 79 percent. The other strategies are the remaining 21 percent." data-bind-aria="split">
+              <span class="split__main" data-bind-width="top_share_n"></span>
+              <span class="split__rest" data-bind-width="rest_share_n"></span>
             </div>
             <figcaption>
-              <span>Largest strategy · 79% · +$13,607.91</span>
-              <span>The other 26 · +$3,670.89</span>
+              <span>Largest strategy · <span data-bind="top_share">79%</span> · <span data-bind="top_pnl">+$13,607.91</span></span>
+              <span>The other <span data-bind="others_n">26</span> · <span data-bind="others_pnl">+$3,670.89</span></span>
             </figcaption>
           </figure>
-          <p>Losing strategies are reported with the winners. Seven finished negative, and one finished flat.</p>
+          <p>Losing strategies are reported with the winners. <span data-bind="neg_word">Seven</span> finished negative, and <span data-bind="flat_word">one</span> finished flat.</p>
           <p>I checked the settlement ledgers across all 27 strategies for row counts, net P&amp;L, and duplicates. One exact duplicate row ($0.19, 24 November) was found and removed. This is a ledger integrity check, not a reconciliation to official exchange account statements — no statement covering this window was available. <a href="/data/Jake-Liu-Reconciliation.xlsx">Reconciliation workbook</a> · <a href="/data/performance-analysis.ipynb">Daily-P&amp;L notebook</a>.</p>
         </aside>
       </div>
@@ -169,6 +169,21 @@
     <div class="wrap">
       <p class="section__kicker">Performance</p>
       <h2 class="section__title" id="performance-title">The book, day by day.</h2>
+      <section class="weekcard" data-weekcard data-theme="light" hidden aria-label="This week">
+        <div class="weekcard__top">
+          <div class="weekcard__main">
+            <p class="perf-label">This week <span class="weekcard__range" data-wk-range></span></p>
+            <p class="weekcard__value" data-wk-value></p>
+            <p class="weekcard__sub" data-wk-sub></p>
+          </div>
+          <div class="weekcard__spark" data-wk-spark role="img" aria-label="This week's cumulative net P&amp;L"></div>
+        </div>
+        <dl class="weekcard__vol">
+          <div><dt>Week volume</dt><dd data-wk-vol></dd></div>
+          <div><dt>Total volume</dt><dd data-wk-volall></dd></div>
+        </dl>
+        <p class="weekcard__note" data-wk-note>Volume counts the contracts on settled trades. Dollar volume is contracts × entry price.</p>
+      </section>
       <div class="perf-head">
         <div class="perf-meta">
           <p class="perf-label">Cumulative net P&amp;L</p>
@@ -186,18 +201,18 @@
         <div class="chart" data-equity tabindex="0" role="application" aria-label="Cumulative net P&amp;L, line chart. Use the left and right arrow keys to move through the days."></div>
         <p class="sr-only" data-perf-live aria-live="polite"></p>
       </figure>
-      <p class="pstats__cap">Whole window · 25 Sep – 27 Nov 2026</p>
+      <p class="pstats__cap">Whole window · <span data-bind="window_short">25 Sep – 27 Nov 2026</span></p>
       <dl class="pstats">
-        <div><dt>Settled trades</dt><dd>29,629</dd></div>
-        <div><dt>Profitable days</dt><dd>55 of 64</dd></div>
-        <div><dt>Average day</dt><dd>+$269.98</dd></div>
-        <div><dt>Profitable weeks</dt><dd>10 of 10</dd></div>
-        <div><dt>Best day</dt><dd>+$3,377.34<span>26 Nov</span></dd></div>
-        <div><dt>Worst day</dt><dd>−$1,447.51<span>24 Nov</span></dd></div>
-        <div><dt>Drawdown, daily closes</dt><dd>$1,447.51</dd></div>
-        <div><dt>Longest losing streak</dt><dd>2 days<span>14–15 Oct</span></dd></div>
+        <div><dt>Settled trades</dt><dd><span data-bind="trades">29,629</span></dd></div>
+        <div><dt>Profitable days</dt><dd><span data-bind="prof_days">55</span> of <span data-bind="days">64</span></dd></div>
+        <div><dt>Average day</dt><dd><span data-bind="avg_day">+$269.98</span></dd></div>
+        <div><dt>Profitable weeks</dt><dd><span data-bind="prof_weeks">10</span> of <span data-bind="weeks">10</span></dd></div>
+        <div><dt>Best day</dt><dd><span data-bind="best_day">+$3,377.34</span><span class="sub" data-bind="best_day_date">26 Nov</span></dd></div>
+        <div><dt>Worst day</dt><dd><span data-bind="worst_day">−$1,447.51</span><span class="sub" data-bind="worst_day_date">24 Nov</span></dd></div>
+        <div><dt>Drawdown, daily closes</dt><dd><span data-bind="dd_close">$1,447.51</span></dd></div>
+        <div><dt>Longest losing streak</dt><dd><span data-bind="streak_n">2</span> days<span class="sub" data-bind="streak_dates">14–15 Oct</span></dd></div>
       </dl>
-      <p class="chart-note">Drawdown is $2,462.07 peak to trough, measured trade by trade, and $1,447.51 on daily closes, which is the figure in the stats above. Window: 25 Sep–27 Nov 2026, ending 19:16 ET on 27 Nov. Settled P&amp;L, aggregated across strategies.</p>
+      <p class="chart-note">Drawdown is <span data-bind="dd_trade">$2,462.07</span> peak to trough, measured trade by trade, and <span data-bind="dd_close">$1,447.51</span> on daily closes, which is the figure in the stats above. Window: <span data-bind="window_short2">25 Sep–27 Nov 2026</span>, ending <span data-bind="asof_time">19:16</span> ET on <span data-bind="end_short">27 Nov</span>. Settled P&amp;L, aggregated across strategies.</p>
       <details class="data-fallback">
         <summary>Daily figures</summary>
         <div class="table-scroll" tabindex="0" data-table></div>
@@ -276,15 +291,15 @@
         </li>
         <li class="reveal">
           <h3>Winners and losers</h3>
-          <p>Losing strategies are reported alongside the winners. Seven of the 27 finished negative, and one finished flat.</p>
+          <p>Losing strategies are reported alongside the winners. <span data-bind="neg_word">Seven</span> of the <span data-bind="strategies">27</span> finished negative, and <span data-bind="flat_word">one</span> finished flat.</p>
         </li>
         <li class="reveal">
           <h3>What counted</h3>
-          <p>29,629 settled live trades, net of fees.</p>
+          <p><span data-bind="trades">29,629</span> settled live trades, net of fees.</p>
         </li>
         <li class="reveal">
           <h3>Drawdown</h3>
-          <p>Defined under the chart: $2,462.07 trade by trade, $1,447.51 on daily closes.</p>
+          <p>Defined under the chart: <span data-bind="dd_trade">$2,462.07</span> trade by trade, <span data-bind="dd_close">$1,447.51</span> on daily closes.</p>
         </li>
         <li class="reveal">
           <h3>Ownership</h3>
@@ -399,7 +414,7 @@
   <div class="wrap footer__inner">
     <p>Views are my own, not my employer’s. This site is not affiliated with or endorsed by Citi.</p>
     <p data-trading>The trading record is settled P&amp;L on my own account for the window stated. Nothing here is an offer to manage money, and nothing here is investment advice.</p>
-    <p class="footer__meta"><a href="/colophon/">Colophon</a> · Updated 27 November 2026 · © 2026 Jake Liu</p>
+    <p class="footer__meta"><a href="/colophon/">Colophon</a> · Updated <span data-bind="end_long">27 November 2026</span> · © 2026 Jake Liu</p>
   </div>
 </footer>
 <script src="/assets/site.js"></script>
