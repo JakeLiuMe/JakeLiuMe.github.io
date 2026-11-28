@@ -173,11 +173,11 @@
     root.querySelector("[data-strip]").replaceChildren(
       stat("Net P&L", money(net)),
       stat("Settled trades", trades.toLocaleString("en-US")),
-      stat("Drawdown, daily closes", plainMoney(maxDd)),
+      stat("Drawdown, daily closes", moneyExact(maxDd).replace(/^\+/, "")),
       stat("Profitable days", upDays + " of " + series.length),
     );
     const underLabel = root.querySelector("[data-under-label]");
-    if (underLabel) underLabel.textContent = "Drawdown on daily closes · " + plainMoney(maxDd);
+    if (underLabel) underLabel.textContent = "Drawdown on daily closes · " + moneyExact(maxDd).replace(/^\+/, "");
     const frame = frameOf(points);
     const equityHost = root.querySelector("[data-equity]");
     const tip = root.querySelector("[data-tip]");
@@ -186,7 +186,7 @@
     root.querySelector("[data-weekly]").replaceChildren(weeklySvg(weeks, frame, tip, root));
     bindCrosshair(equityHost, points, frame, tip, root);
     const fullNet = withEquity(full)[full.length - 1].cum;
-    equityHost.setAttribute("aria-label", "Cumulative net P&L " + money(net) + " from " + pretty(points[0].date) + " to " + pretty(points[points.length - 1].date) + ". Drawdown on daily closes " + plainMoney(maxDd) + ". Full-window trade-level drawdown " + plainMoney(2462) + ". Full-window net " + money(fullNet) + ".");
+    equityHost.setAttribute("aria-label", "Cumulative net P&L " + money(net) + " from " + pretty(points[0].date) + " to " + pretty(points[points.length - 1].date) + ". Drawdown on daily closes " + moneyExact(maxDd).replace(/^\+/, "") + ". Full-window trade-level drawdown " + moneyExact(TRADE_DD).replace(/^\+/, "") + ". Full-window net " + money(fullNet) + ".");
     armDraw(root.querySelector("[data-equity] svg"));
   }
 
@@ -200,6 +200,13 @@
     return wrap;
   }
 
+  const TRADE_DD = 2462.07;
+  const MARKS = [
+    { date: "2026-11-15", label: "Size increased", kind: "size" },
+    { date: "2026-11-23", label: "Size increased", kind: "size" },
+    { date: "2026-11-24", label: "Worst day −$1,447.51", kind: "dip" },
+    { date: "2026-11-25", label: "Size increased", kind: "size" }
+  ];
   const NS = "http://www.w3.org/2000/svg";
   let gradSeq = 0;
 
@@ -207,7 +214,7 @@
     const compact = window.matchMedia("(max-width: 700px)").matches;
     const width = compact ? 480 : 800;
     const height = compact ? 300 : 360;
-    const pad = compact ? { l: 64, r: 14, t: 42, b: 40 } : { l: 54, r: 20, t: 36, b: 36 };
+    const pad = compact ? { l: 64, r: 14, t: 56, b: 40 } : { l: 54, r: 20, t: 52, b: 36 };
     const font = compact ? 18 : 13;
     const hi = Math.max(...points.map((p) => p.cum), 0);
     const lo = Math.min(0, ...points.map((p) => p.cum));
@@ -275,6 +282,19 @@
     const endLabel = el("text", { x: lx - 10, y: Math.max(frame.font + 4, ly - 12), "text-anchor": "end", fill: "#1E5E48", "font-family": "Inter, sans-serif", "font-size": frame.font + 1, "font-weight": "600" });
     endLabel.textContent = money(last.cum);
     svg.append(endLabel);
+    const byDate = new Map(points.map((point) => [point.date, point]));
+    MARKS.forEach((mark) => {
+      const point = byDate.get(mark.date);
+      if (!point) return;
+      const mx = xOf(point.date);
+      const my = yOf(point.cum);
+      const dip = mark.kind === "dip";
+      svg.append(el("line", { x1: mx, x2: mx, y1: pad.t - 6, y2: my, stroke: dip ? "#7A1F2B" : "#8A8276", "stroke-dasharray": "2 3", "stroke-width": "1", "pointer-events": "none" }));
+      svg.append(el("circle", { cx: mx, cy: my, r: "3.5", fill: dip ? "#7A1F2B" : "#12110F", stroke: "#F4F0E6", "stroke-width": "1.5", "pointer-events": "none" }));
+      const lab = el("text", { x: mx, y: Math.max(frame.font + 2, my - (dip ? 16 : 14)), "text-anchor": "middle", fill: dip ? "#7A1F2B" : "#5E584E", "font-family": "Inter, sans-serif", "font-size": Math.max(9, frame.font - 2), "font-weight": dip ? "600" : "500" });
+      lab.textContent = mark.label;
+      svg.append(lab);
+    });
     svg.dataset.maxDd = String(maxDd);
     const hair = el("line", { class: "crosshair", x1: 0, x2: 0, y1: pad.t, y2: height - pad.b, stroke: "#5E584E", "stroke-dasharray": "3 3", visibility: "hidden" });
     const dot = el("circle", { class: "crossdot", r: "4.5", fill: "#F4F0E6", stroke: "#1E5E48", "stroke-width": "2", visibility: "hidden" });
@@ -326,6 +346,21 @@
       rect.addEventListener("pointerleave", () => { tip.hidden = true; });
       rect.addEventListener("blur", () => { tip.hidden = true; });
       svg.append(rect);
+      const value = el("text", {
+        x: x + weekWidth / 2,
+        y: week.net_pnl_usd >= 0 ? y - 5 : y + h + 11,
+        "text-anchor": "middle",
+        fill: week.net_pnl_usd < 0 ? "#7A1F2B" : "#1E5E48",
+        "font-family": "Inter, sans-serif",
+        "font-size": frame.font > 16 ? 11 : 10,
+        "font-weight": "600",
+      });
+      const abs = Math.abs(week.net_pnl_usd);
+      const short = abs >= 1000
+        ? (week.net_pnl_usd < 0 ? "−" : "+") + "$" + (abs / 1000).toFixed(abs >= 10000 ? 1 : 1) + "K"
+        : (week.net_pnl_usd < 0 ? "−" : "+") + "$" + Math.round(abs);
+      value.textContent = short;
+      svg.append(value);
     }
     return svg;
   }
@@ -362,11 +397,20 @@
       const text = pretty(point.date) + "\nDaily " + moneyExact(point.net_pnl_usd) + "\nCumulative " + moneyExact(point.cum);
       placeTip(tip, root, svg, text, (x / frame.width) * box.width, (y / frame.height) * box.height);
     };
+    host.style.touchAction = "none";
     host.addEventListener("pointermove", (event) => {
-      if (event.pointerType === "touch") return;
       show(event.clientX);
     });
-    host.addEventListener("pointerdown", (event) => show(event.clientX));
+    host.addEventListener("pointerdown", (event) => {
+      if (host.setPointerCapture) host.setPointerCapture(event.pointerId);
+      show(event.clientX);
+    });
+    host.addEventListener("pointerup", (event) => {
+      if (event.pointerType !== "mouse") return;
+      hair.setAttribute("visibility", "hidden");
+      dot.setAttribute("visibility", "hidden");
+      tip.hidden = true;
+    });
     host.addEventListener("pointerleave", (event) => {
       if (event.pointerType && event.pointerType !== "mouse") return;
       hair.setAttribute("visibility", "hidden");
